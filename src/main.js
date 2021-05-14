@@ -3,7 +3,21 @@ let config =
     type: Phaser.CANVAS,
     width: 800,
     height: 800,
-    scene: [Menu, Play]
+    scene: [Menu, Play],
+    physics:
+    {
+        default: 'arcade',
+        arcade:
+        {
+            debug: false
+        }
+    },
+    fps: {
+        target: 60,
+        forceSetTimeOut: true
+    }
 }
 
 let game = new Phaser.Game(config);
+
+let keySPACE;
