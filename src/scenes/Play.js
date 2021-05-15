@@ -9,10 +9,14 @@ class Play extends Phaser.Scene
     {
         //load sprites
         this.load.image('player','./assets/tempPlayer.png');
+        this.load.image('background', './assets/tempBackground.png');
     }
 
     create()
     {
+        //create background sprite
+        this.bg = this.add.tileSprite(0,0,800,800,'background').setOrigin(0,0);
+
         //create object for pointer position coordinates
         this.target = new Phaser.Math.Vector2();
 
