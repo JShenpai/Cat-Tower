@@ -5,24 +5,24 @@ class Play extends Phaser.Scene
         super("playScene");
     }
 
-    
-
     preload()
     {
+        //load sprites
         this.load.image('player','./assets/tempPlayer.png');
     }
 
     create()
     {
+        //create object for pointer position coordinates
         this.target = new Phaser.Math.Vector2();
+
+        //placeholder title text
         this.add.text(20, 20, "Cat Tower Play");
+
+        //player sprite placement
         this.player = this.physics.add.sprite(game.config.width/2,game.config.height/2,'player').setOrigin(0,0);
-        /*
-        this.input.on('pointerdown', function (pointer) 
-        {
-            this.add.image(pointer.x, pointer.y, 'player');
-        }, this);
-        */
+
+        //movement mechanic, move towards cursor position at time of left click
         this.input.on('pointerdown', function (pointer)
         {
 
@@ -35,6 +35,8 @@ class Play extends Phaser.Scene
 
     update()
     {
+
+        //stop player once they come within 4 pixels of position
         this.distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.target.x, this.target.y)
         {
             if(this.distance < 4)

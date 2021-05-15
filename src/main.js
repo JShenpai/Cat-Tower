@@ -20,4 +20,5 @@ let config =
 
 let game = new Phaser.Game(config);
 
+//reserve input variable names
 let keySPACE;
