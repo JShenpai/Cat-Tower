@@ -25,6 +25,7 @@ class Play extends Phaser.Scene
 
         //placeholder title text
         this.add.text(20, 20, "Cat Tower Play");
+        this.add.text(20, 40, "LEFT CLICK to move, SPACE to place object");
 
         //tower sprite placement
         this.mainTower = this.physics.add.sprite(game.config.width/2,game.config.height / 2,'maintower').setOrigin(0,0);

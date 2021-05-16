@@ -9,6 +9,7 @@ class Menu extends Phaser.Scene
     {
         //placeholder title text
         this.add.text(20, 20, "Cat Tower Main Menu");
+        this.add.text(20, 60, "Press SPACE to begin");
 
         //declare input variables
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
