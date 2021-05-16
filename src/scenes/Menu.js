@@ -5,6 +5,12 @@ class Menu extends Phaser.Scene
         super("menuScene");
     }
 
+    preload()
+    {
+        this.load.audio('squeak','./assets/squeakTEMP.wav');
+        this.load.audio('place','./assets/placeTEMP.wav');
+    }
+
     create()
     {
         //placeholder title text

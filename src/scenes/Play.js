@@ -39,7 +39,7 @@ class Play extends Phaser.Scene
         //movement mechanic, move towards cursor position at time of left click
         this.input.on('pointerdown', function (pointer)
         {
-
+            this.sound.play('squeak', {volume: 0.33});
             this.target.x = pointer.x;
             this.target.y = pointer.y;
 
@@ -65,6 +65,7 @@ class Play extends Phaser.Scene
         //place object at player position when pressing space (if they are not moving)
         if (Phaser.Input.Keyboard.JustDown(keySPACE) && this.distance < 4) {
             this.object1 = this.physics.add.sprite(this.player.x + (this.player.width / 4), this.player.y - (this.player.height * 3/4), 'object').setOrigin(0,0);
+            this.sound.play('place', {volume: 0.33});
 
             //object collision
             this.physics.add.collider(this.player, this.object1);
