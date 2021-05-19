@@ -68,8 +68,15 @@ class Play extends Phaser.Scene
             this.sound.play('place', {volume: 0.33});
 
             //object collision
-            this.physics.add.collider(this.player, this.object1);
+            this.physics.add.collider(this.player, this.object1, this.decelerate, null, this);
             this.physics.add.collider(this.enemy, this.object1);
         }
+    }
+
+    //deceleration function for ball object
+    decelerate(player, object)
+    {
+        object.setDamping(true);
+        object.setDrag(0.35);
     }
 }
