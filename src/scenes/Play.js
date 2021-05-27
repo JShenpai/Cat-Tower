@@ -62,6 +62,8 @@ class Play extends Phaser.Scene
             }
         }
 
+        
+
         //place object at player position when pressing space (if they are not moving)
         if (Phaser.Input.Keyboard.JustDown(keySPACE) && this.distance < 4) {
             this.object1 = this.physics.add.sprite(this.player.x + (this.player.width / 4), this.player.y - (this.player.height * 3/4), 'object').setOrigin(0,0);
@@ -70,7 +72,18 @@ class Play extends Phaser.Scene
             //object collision
             this.physics.add.collider(this.player, this.object1, this.decelerate, null, this);
             this.physics.add.collider(this.enemy, this.object1);
+
+            this.radius = Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.object1.x, this.object1.y)
+            {
+                if(this.radius < 75)
+                {
+                    this.physics.moveToObject(this.enemy, this.object1, 100);
+                }
+            }
+            console.log(this.radius);
         }
+
+        
     }
 
     //deceleration function for ball object
