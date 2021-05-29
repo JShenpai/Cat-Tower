@@ -48,6 +48,9 @@ class Play extends Phaser.Scene
 
         //define other keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        //enemy spawn timer
+        this.timer = this.time.addEvent({ delay: 5000, callback: this.spawnEnemy, callbackScope: this, loop: true });
     }
 
     update()
@@ -91,5 +94,42 @@ class Play extends Phaser.Scene
     {
         object.setDamping(true);
         object.setDrag(0.35);
+    }
+
+    //spawn an enemy
+    spawnEnemy()
+    {
+        var side = Phaser.Math.Between(0,3);
+        switch(side)
+        {
+            case 0:
+                //spawn on top of screen
+                console.log('Top');
+                this.spawn = this.physics.add.sprite(Phaser.Math.Between(0,game.config.width),game.config.height,'enemy').setOrigin(0,0);
+                this.physics.moveToObject(this.spawn, this.mainTower, 25);
+                break;
+            case 1:
+                //spawn on right of screen
+                console.log('Right');
+                this.spawn = this.physics.add.sprite(game.config.width,Phaser.Math.Between(0,game.config.height),'enemy').setOrigin(0,0);
+                this.physics.moveToObject(this.spawn, this.mainTower, 25);
+                break;
+            case 2:
+                //spawn on bottom of screen
+                console.log('Bottom');
+                this.spawn = this.physics.add.sprite(Phaser.Math.Between(0,game.config.width),0,'enemy').setOrigin(0,0);
+                this.physics.moveToObject(this.spawn, this.mainTower, 25);
+                break;
+            case 3:
+                //spawn on left of screen
+                console.log('Left');
+                this.spawn = this.physics.add.sprite(0,Phaser.Math.Between(0,game.config.height),'enemy').setOrigin(0,0);
+                this.physics.moveToObject(this.spawn, this.mainTower, 25);
+                break;
+            default:
+                //this should never happen
+                console.log(side);
+                break;
+        }
     }
 }
