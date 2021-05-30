@@ -30,9 +30,6 @@ class Play extends Phaser.Scene
         //tower sprite placement
         this.mainTower = this.physics.add.sprite(game.config.width/2,game.config.height / 2,'maintower').setOrigin(0,0);
 
-        //enemy sprite placement (temporary?)
-        this.enemy = this.physics.add.sprite(game.config.width / 4,game.config.height / 4,'enemy').setOrigin(0,0);
-
         //player sprite placement
         this.player = this.physics.add.sprite(game.config.width/2,game.config.height * 3/4,'player').setOrigin(0,0);
 
@@ -51,6 +48,12 @@ class Play extends Phaser.Scene
 
         //enemy spawn timer
         this.timer = this.time.addEvent({ delay: 5000, callback: this.spawnEnemy, callbackScope: this, loop: true });
+
+        this.object1 = false;
+        this.spawn = false;
+
+        this.cats = this.physics.add.group();
+        this.balls = this.physics.add.group();
     }
 
     update()
@@ -74,19 +77,18 @@ class Play extends Phaser.Scene
 
             //object collision
             this.physics.add.collider(this.player, this.object1, this.decelerate, null, this);
-            this.physics.add.collider(this.enemy, this.object1);
-
-            this.radius = Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.object1.x, this.object1.y)
-            {
-                if(this.radius < 75)
-                {
-                    this.physics.moveToObject(this.enemy, this.object1, 100);
-                }
-            }
-            console.log(this.radius);
         }
 
-        
+        //radius to attract cats
+        if (this.object1 && this.spawn) {
+            this.radius = Phaser.Math.Distance.Between(this.spawn.x, this.spawn.y, this.object1.x, this.object1.y)
+            {
+                if(this.radius < 100)
+                {
+                    this.physics.moveToObject(this.spawn, this.object1, 100);
+                }
+            }
+        }
     }
 
     //deceleration function for ball object
