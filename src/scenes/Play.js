@@ -52,8 +52,16 @@ class Play extends Phaser.Scene
         this.object1 = false;
         this.spawn = false;
 
+        //physics groups
         this.cats = this.physics.add.group();
         this.balls = this.physics.add.group();
+
+        //number of balls and ball limit
+        this.ballLimit = 5;
+        this.ballNumber = 0;
+
+        //ball limit increase timer
+        this.limitTimer = this.time.addEvent({ delay: 5000, callback: this.increaseLimit, callbackScope: this, loop: true });
     }
 
     update()
@@ -71,9 +79,10 @@ class Play extends Phaser.Scene
         
 
         //place object at player position when pressing space (if they are not moving)
-        if (Phaser.Input.Keyboard.JustDown(keySPACE) && this.distance < 4) {
+        if (Phaser.Input.Keyboard.JustDown(keySPACE) && this.distance < 4 && this.ballNumber < this.ballLimit) {
             this.object1 = this.physics.add.sprite(this.player.x + (this.player.width / 4), this.player.y - (this.player.height * 3/4), 'object').setOrigin(0,0);
             this.sound.play('place', {volume: 0.33});
+            this.ballNumber++;
 
             //object collision
             this.physics.add.collider(this.player, this.object1, this.decelerate, null, this);
@@ -133,5 +142,9 @@ class Play extends Phaser.Scene
                 console.log(side);
                 break;
         }
+    }
+
+    increaseLimit() {
+        this.ballLimit++;
     }
 }
