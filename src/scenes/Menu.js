@@ -21,7 +21,7 @@ class Menu extends Phaser.Scene
 
     create()
     {
-        //menu screen
+        //main menu art/title text
         this.add.tileSprite(0,0,800,800,'mainMenu').setOrigin(0,0);
 
         //declare input variables
