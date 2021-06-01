@@ -15,13 +15,14 @@ class Menu extends Phaser.Scene
         this.load.audio('meow2','./assets/meow2.wav');
         this.load.audio('meow3','./assets/meow3.wav');
         this.load.audio('meow4','./assets/meow4.wav');
+
+        this.load.image('mainMenu','./assets/mainMenu.jpg');
     }
 
     create()
     {
-        //placeholder title text
-        this.add.text(20, 20, "Cat Tower Main Menu");
-        this.add.text(20, 60, "Press SPACE to begin");
+        //menu screen
+        this.add.tileSprite(0,0,800,800,'mainMenu').setOrigin(0,0);
 
         //declare input variables
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
