@@ -8,11 +8,11 @@ class Play extends Phaser.Scene
     preload()
     {
         //load sprites
-        this.load.image('player','./assets/tempPlayer.png');
-        this.load.image('background', './assets/tempBackground.png');
-        this.load.image('object','./assets/tempObject.png');
-        this.load.image('enemy','./assets/tempEnemy.png');
-        this.load.image('maintower','./assets/tempTower.png');
+        this.load.spritesheet('player', './assets/mouse.png', {frameWidth: 40, frameHeight: 40, startFrame: 0, endFrame: 1});
+        this.load.image('background', './assets/background.png');
+        this.load.image('object','./assets/ball.png');
+        this.load.spritesheet('enemy', './assets/cat.png', {frameWidth: 40, frameHeight: 40, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('maintower', './assets/fishbowl.png', {frameWidth: 80, frameHeight: 80, startFrame: 0, endFrame: 7});
     }
 
     create()
@@ -24,11 +24,11 @@ class Play extends Phaser.Scene
         this.target = new Phaser.Math.Vector2();
 
         //placeholder title text
-        this.add.text(20, 20, "Cat Tower Play");
-        this.add.text(20, 40, "LEFT CLICK to move, SPACE to place object");
+        this.add.text(40, 40, "Cat Tower Play");
+        this.add.text(40, 60, "LEFT CLICK to move, SPACE to place object");
 
         //tower sprite placement
-        this.mainTower = this.physics.add.sprite(game.config.width/2,game.config.height / 2,'maintower').setOrigin(0,0);
+        this.mainTower = this.physics.add.sprite(game.config.width/2 - 40,game.config.height / 2 - 40,'maintower').setOrigin(0,0);
 
         //player sprite placement
         this.player = this.physics.add.sprite(game.config.width/2,game.config.height * 3/4,'player').setOrigin(0,0);
@@ -62,6 +62,29 @@ class Play extends Phaser.Scene
 
         //ball limit increase timer
         this.limitTimer = this.time.addEvent({ delay: 5000, callback: this.increaseLimit, callbackScope: this, loop: true });
+
+        // animation config
+        this.anims.create({
+            key: 'mouseanim',
+            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 1, first: 0}),
+            frameRate: 7,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'catanim',
+            frames: this.anims.generateFrameNumbers('enemy', { start: 0, end: 3, first: 0}),
+            frameRate: 7,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'bowlanim',
+            frames: this.anims.generateFrameNumbers('maintower', { start: 0, end: 7, first: 0}),
+            frameRate: 7,
+            repeat: -1
+        });
+
+        this.player.anims.play('mouseanim', true);
+        this.mainTower.anims.play('bowlanim', true);
     }
 
     update()
@@ -118,24 +141,28 @@ class Play extends Phaser.Scene
                 console.log('Top');
                 this.spawn = this.physics.add.sprite(Phaser.Math.Between(0,game.config.width),game.config.height,'enemy').setOrigin(0,0);
                 this.physics.moveToObject(this.spawn, this.mainTower, 25);
+                this.spawn.anims.play('catanim', true);
                 break;
             case 1:
                 //spawn on right of screen
                 console.log('Right');
                 this.spawn = this.physics.add.sprite(game.config.width,Phaser.Math.Between(0,game.config.height),'enemy').setOrigin(0,0);
                 this.physics.moveToObject(this.spawn, this.mainTower, 25);
+                this.spawn.anims.play('catanim', true);
                 break;
             case 2:
                 //spawn on bottom of screen
                 console.log('Bottom');
                 this.spawn = this.physics.add.sprite(Phaser.Math.Between(0,game.config.width),0,'enemy').setOrigin(0,0);
                 this.physics.moveToObject(this.spawn, this.mainTower, 25);
+                this.spawn.anims.play('catanim', true);
                 break;
             case 3:
                 //spawn on left of screen
                 console.log('Left');
                 this.spawn = this.physics.add.sprite(0,Phaser.Math.Between(0,game.config.height),'enemy').setOrigin(0,0);
                 this.physics.moveToObject(this.spawn, this.mainTower, 25);
+                this.spawn.anims.play('catanim', true);
                 break;
             default:
                 //this should never happen
