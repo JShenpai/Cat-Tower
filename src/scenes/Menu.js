@@ -7,8 +7,14 @@ class Menu extends Phaser.Scene
 
     preload()
     {
-        this.load.audio('squeak','./assets/squeakTEMP.wav');
-        this.load.audio('place','./assets/placeTEMP.wav');
+        this.load.audio('squeak','./assets/squeak.wav');
+        this.load.audio('place','./assets/place.wav');
+        this.load.audio('bell','./assets/bell.wav');
+        this.load.audio('meow0','./assets/meow0.wav');
+        this.load.audio('meow1','./assets/meow1.wav');
+        this.load.audio('meow2','./assets/meow2.wav');
+        this.load.audio('meow3','./assets/meow3.wav');
+        this.load.audio('meow4','./assets/meow4.wav');
     }
 
     create()

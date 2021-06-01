@@ -36,7 +36,7 @@ class Play extends Phaser.Scene
         //movement mechanic, move towards cursor position at time of left click
         this.input.on('pointerdown', function (pointer)
         {
-            this.sound.play('squeak', {volume: 0.33});
+            this.sound.play('squeak', {volume: 0.25});
             this.target.x = pointer.x;
             this.target.y = pointer.y;
 
@@ -104,7 +104,7 @@ class Play extends Phaser.Scene
         //place object at player position when pressing space (if they are not moving)
         if (Phaser.Input.Keyboard.JustDown(keySPACE) && this.distance < 4 && this.ballNumber < this.ballLimit) {
             this.object1 = this.physics.add.sprite(this.player.x + (this.player.width / 4), this.player.y - (this.player.height * 3/4), 'object').setOrigin(0,0);
-            this.sound.play('place', {volume: 0.33});
+            this.sound.play('place', {volume: 0.25});
             this.ballNumber++;
 
             //object collision
@@ -118,6 +118,9 @@ class Play extends Phaser.Scene
                 if(this.radius < 100)
                 {
                     this.physics.moveToObject(this.spawn, this.object1, 100);
+                    if (this.radius < 1) {
+                        this.sound.play('bell', {volume: 0.05});
+                    }
                 }
             }
         }
@@ -133,6 +136,28 @@ class Play extends Phaser.Scene
     //spawn an enemy
     spawnEnemy()
     {
+        var randmeow = Phaser.Math.Between(0,4);
+        switch(randmeow) {
+            case 0:
+                this.sound.play('meow0', {volume: 0.25});
+                break;
+            case 1:
+                this.sound.play('meow1', {volume: 0.25});
+                break;
+            case 2:
+                this.sound.play('meow2', {volume: 0.25});
+                break;
+            case 3:
+                this.sound.play('meow3', {volume: 0.25});
+                break;
+            case 4:
+                this.sound.play('meow4', {volume: 0.25});
+                break;
+            case 1:
+                console.log(randmeow);
+                break;
+        }
+
         var side = Phaser.Math.Between(0,3);
         switch(side)
         {
