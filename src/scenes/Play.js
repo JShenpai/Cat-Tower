@@ -17,6 +17,7 @@ class Play extends Phaser.Scene
 
     create()
     {
+        this.hp = 3;
         //create background sprite
         this.bg = this.add.tileSprite(0,0,800,800,'background').setOrigin(0,0);
 
@@ -29,6 +30,7 @@ class Play extends Phaser.Scene
 
         //tower sprite placement
         this.mainTower = this.physics.add.sprite(game.config.width/2 - 40,game.config.height / 2 - 40,'maintower').setOrigin(0,0);
+        this.mainTower.setImmovable(true);
 
         //player sprite placement
         this.player = this.physics.add.sprite(game.config.width/2,game.config.height * 3/4,'player').setOrigin(0,0);
@@ -86,11 +88,15 @@ class Play extends Phaser.Scene
         this.player.anims.play('mouseanim', true);
         this.mainTower.anims.play('bowlanim', true);
 
-        this.bellPlayed = false;
+        this.physics.add.collider(this.mainTower, this.cats, this.loseHp, null, this);
     }
 
     update()
     {
+        if(this.hp == 0)
+        {
+            this.scene.start('endScene');
+        }
 
         //stop player once they come within 4 pixels of position
         this.distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.target.x, this.target.y)
@@ -103,9 +109,12 @@ class Play extends Phaser.Scene
 
         
 
+        
+
         //place object at player position when pressing space (if they are not moving)
         if (Phaser.Input.Keyboard.JustDown(keySPACE) && this.distance < 4 && this.ballNumber < this.ballLimit) {
             this.object1 = this.physics.add.sprite(this.player.x + (this.player.width / 4), this.player.y - (this.player.height * 3/4), 'object').setOrigin(0,0);
+            this.balls.add(this.object1)
             this.sound.play('place', {volume: 0.25});
             this.ballNumber++;
 
@@ -120,10 +129,8 @@ class Play extends Phaser.Scene
                 if(this.radius < 100)
                 {
                     this.physics.moveToObject(this.spawn, this.object1, 100);
-                    if (this.radius < 1 && !this.bellPlayed) {
+                    if (this.radius < 1) {
                         this.sound.play('bell', {volume: 0.05});
-                        this.bellPlayed = true;
-                        this.bellTimer = this.time.addEvent({ delay: 1000, callback: this.bellCooldown, callbackScope: this });
                     }
                 }
             }
@@ -169,6 +176,7 @@ class Play extends Phaser.Scene
                 //spawn on top of screen
                 console.log('Top');
                 this.spawn = this.physics.add.sprite(Phaser.Math.Between(0,game.config.width),game.config.height,'enemy').setOrigin(0,0);
+                this.cats.add(this.spawn);
                 this.physics.moveToObject(this.spawn, this.mainTower, 25);
                 this.spawn.anims.play('catanim', true);
                 break;
@@ -176,6 +184,7 @@ class Play extends Phaser.Scene
                 //spawn on right of screen
                 console.log('Right');
                 this.spawn = this.physics.add.sprite(game.config.width,Phaser.Math.Between(0,game.config.height),'enemy').setOrigin(0,0);
+                this.cats.add(this.spawn);
                 this.physics.moveToObject(this.spawn, this.mainTower, 25);
                 this.spawn.anims.play('catanim', true);
                 break;
@@ -183,6 +192,7 @@ class Play extends Phaser.Scene
                 //spawn on bottom of screen
                 console.log('Bottom');
                 this.spawn = this.physics.add.sprite(Phaser.Math.Between(0,game.config.width),0,'enemy').setOrigin(0,0);
+                this.cats.add(this.spawn);
                 this.physics.moveToObject(this.spawn, this.mainTower, 25);
                 this.spawn.anims.play('catanim', true);
                 break;
@@ -190,6 +200,7 @@ class Play extends Phaser.Scene
                 //spawn on left of screen
                 console.log('Left');
                 this.spawn = this.physics.add.sprite(0,Phaser.Math.Between(0,game.config.height),'enemy').setOrigin(0,0);
+                this.cats.add(this.spawn);
                 this.physics.moveToObject(this.spawn, this.mainTower, 25);
                 this.spawn.anims.play('catanim', true);
                 break;
@@ -204,7 +215,10 @@ class Play extends Phaser.Scene
         this.ballLimit++;
     }
 
-    bellCooldown() {
-        this.bellPlayed = false;
+    loseHp(tower, cat)
+    {
+        this.hp--;
+        cat.destroy();
+        console.log(this.hp);
     }
 }
