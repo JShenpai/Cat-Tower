@@ -85,6 +85,8 @@ class Play extends Phaser.Scene
 
         this.player.anims.play('mouseanim', true);
         this.mainTower.anims.play('bowlanim', true);
+
+        this.bellPlayed = false;
     }
 
     update()
@@ -118,8 +120,10 @@ class Play extends Phaser.Scene
                 if(this.radius < 100)
                 {
                     this.physics.moveToObject(this.spawn, this.object1, 100);
-                    if (this.radius < 1) {
+                    if (this.radius < 1 && !this.bellPlayed) {
                         this.sound.play('bell', {volume: 0.05});
+                        this.bellPlayed = true;
+                        this.bellTimer = this.time.addEvent({ delay: 1000, callback: this.bellCooldown, callbackScope: this });
                     }
                 }
             }
@@ -198,5 +202,9 @@ class Play extends Phaser.Scene
 
     increaseLimit() {
         this.ballLimit++;
+    }
+
+    bellCooldown() {
+        this.bellPlayed = false;
     }
 }

@@ -16,7 +16,6 @@ class Menu extends Phaser.Scene
         this.load.audio('meow2','./assets/meow2.wav');
         this.load.audio('meow3','./assets/meow3.wav');
         this.load.audio('meow4','./assets/meow4.wav');
-        
     }
 
     create()
