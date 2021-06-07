@@ -28,7 +28,7 @@ class Play extends Phaser.Scene
         this.add.text(40, 40, "Cat Tower Play");
         this.add.text(40, 60, "LEFT CLICK to move, SPACE to place object");
 
-        //tower sprite placement
+        //fishbowl sprite placement
         this.mainTower = this.physics.add.sprite(game.config.width/2 - 40,game.config.height / 2 - 40,'maintower').setOrigin(0,0);
         this.mainTower.setImmovable(true);
 
@@ -59,11 +59,11 @@ class Play extends Phaser.Scene
         this.balls = this.physics.add.group();
 
         //number of balls and ball limit
-        this.ballLimit = 5;
+        this.ballLimit = 3;
         this.ballNumber = 0;
 
         //ball limit increase timer
-        this.limitTimer = this.time.addEvent({ delay: 5000, callback: this.increaseLimit, callbackScope: this, loop: true });
+        this.limitTimer = this.time.addEvent({ delay: 15000, callback: this.increaseLimit, callbackScope: this, loop: true });
 
         // animation config
         this.anims.create({
@@ -85,14 +85,20 @@ class Play extends Phaser.Scene
             repeat: -1
         });
 
+        //play default animations
         this.player.anims.play('mouseanim', true);
         this.mainTower.anims.play('bowlanim', true);
 
+        //collision between fishbowl and cat
         this.physics.add.collider(this.mainTower, this.cats, this.loseHp, null, this);
+
+        //bell timer boolean to prevent spamming the sound
+        this.bellPlayed = false;
     }
 
     update()
     {
+        //game over scene if fishbowl loses all hp
         if(this.hp == 0)
         {
             this.scene.start('endScene');
@@ -106,10 +112,6 @@ class Play extends Phaser.Scene
                 this.player.body.reset(this.target.x,this.target.y);
             }
         }
-
-        
-
-        
 
         //place object at player position when pressing space (if they are not moving)
         if (Phaser.Input.Keyboard.JustDown(keySPACE) && this.distance < 4 && this.ballNumber < this.ballLimit) {
@@ -129,8 +131,11 @@ class Play extends Phaser.Scene
                 if(this.radius < 100)
                 {
                     this.physics.moveToObject(this.spawn, this.object1, 100);
-                    if (this.radius < 1) {
+                    //play sound once every second when cat is touching ball
+                    if (this.radius < 1 && !this.bellPlayed) {
                         this.sound.play('bell', {volume: 0.05});
+                        this.bellPlayed = true;
+                        this.bellTimer = this.time.addEvent({ delay: 1000, callback: this.bellCooldown, callbackScope: this });
                     }
                 }
             }
@@ -147,6 +152,7 @@ class Play extends Phaser.Scene
     //spawn an enemy
     spawnEnemy()
     {
+        //play random cat sound
         var randmeow = Phaser.Math.Between(0,4);
         switch(randmeow) {
             case 0:
@@ -164,11 +170,12 @@ class Play extends Phaser.Scene
             case 4:
                 this.sound.play('meow4', {volume: 0.25});
                 break;
-            case 1:
+            default:
                 console.log(randmeow);
                 break;
         }
 
+        //spawn from random screen edge
         var side = Phaser.Math.Between(0,3);
         switch(side)
         {
@@ -211,10 +218,17 @@ class Play extends Phaser.Scene
         }
     }
 
+    //increase max placeable balls after a certain time
     increaseLimit() {
         this.ballLimit++;
     }
 
+    //end cooldown 1 second after bell sound plays
+    bellCooldown() {
+        this.bellPlayed = false;
+    }
+
+    //damage fishbowl when cat reaches it
     loseHp(tower, cat)
     {
         this.hp--;
