@@ -41,6 +41,7 @@ class Play extends Phaser.Scene
 
         //player sprite placement
         this.player = this.physics.add.sprite(game.config.width/2,game.config.height * 3/4,'player').setOrigin(0,0);
+        this.player.setCollideWorldBounds(true);
 
         //movement mechanic, move towards cursor position at time of left click
         this.input.on('pointerdown', function (pointer)
@@ -132,7 +133,9 @@ class Play extends Phaser.Scene
         //place object at player position when pressing space (if they are not moving)
         if (Phaser.Input.Keyboard.JustDown(keySPACE) && this.distance < 4 && this.ballNumber < this.ballLimit) {
             this.object1 = this.physics.add.sprite(this.player.x + (this.player.width / 4), this.player.y - (this.player.height * 3/4), 'object').setOrigin(0,0);
-            this.balls.add(this.object1)
+            this.balls.add(this.object1);
+            this.object1.setCollideWorldBounds(true);
+            this.object1.body.bounce.set(0.33);
             this.sound.play('place', {volume: 0.25});
             this.ballNumber++;
             this.numberText.text = "Balls in the playground: " + this.ballNumber;
