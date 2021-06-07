@@ -19,6 +19,9 @@ class Play extends Phaser.Scene
 
     create()
     {
+        //fade in
+        this.cameras.main.fadeIn(1000, 0, 0, 0)
+        
         this.hp = 3;
         //create background sprite
         this.bg = this.add.tileSprite(0,0,800,800,'background').setOrigin(0,0);
@@ -29,11 +32,17 @@ class Play extends Phaser.Scene
         //number of balls and ball limit
         this.ballLimit = 3;
         this.ballNumber = 0;
+        
+        //text settings
+        let textConfig = {
+            fontFamily: 'Tahoma',
+            fontSize: '18px'
+        }
 
-        //placeholder title text
-        this.add.text(40, 40, "LEFT CLICK to move, SPACE to place object");
-        this.numberText = this.add.text(40, 60, "Balls in the playground: " + this.ballNumber);
-        this.limitText = this.add.text(40, 80, "Maximum balls: " + this.ballLimit);
+        //controls + ball counts text
+        this.add.text(40, 40, "[LEFT CLICK] to move, [SPACE] to place object", textConfig);
+        this.numberText = this.add.text(40, 60, "Balls in the playground: " + this.ballNumber, textConfig);
+        this.limitText = this.add.text(40, 80, "Maximum balls: " + this.ballLimit, textConfig);
 
         //fishbowl sprite placement
         this.mainTower = this.physics.add.sprite(game.config.width/2 - 40,game.config.height / 2 - 40,'maintower').setOrigin(0,0);

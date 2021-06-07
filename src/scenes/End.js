@@ -12,6 +12,9 @@ class End extends Phaser.Scene
 
     create()
     {
+        //fade in
+        this.cameras.main.fadeIn(1000, 0, 0, 0)
+
         console.log("GAME OVER");
         this.add.text(20, 20, "Cat Tower Game Over");
         this.add.tileSprite(0,0,800,800,'gameOver').setOrigin(0,0);
@@ -26,12 +29,29 @@ class End extends Phaser.Scene
     {
         if(Phaser.Input.Keyboard.JustDown(this.keySPACE))
         {
-            this.scene.start('menuScene');
+            //fade out
+            this.cameras.main.fadeOut(1000, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                this.scene.start('menuScene');
+            });
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.keyR))
         {
-            this.scene.start('playScene');
+            //fade out
+            this.cameras.main.fadeOut(1000, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                this.scene.start('playScene');
+            });
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(this.keyC))
+        {
+            //fade out
+            this.cameras.main.fadeOut(1000, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                this.scene.start('cutScene1');
+            });
         }
     }
 }
