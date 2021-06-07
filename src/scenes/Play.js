@@ -13,6 +13,8 @@ class Play extends Phaser.Scene
         this.load.image('object','./assets/ball.png');
         this.load.spritesheet('enemy', './assets/cat.png', {frameWidth: 40, frameHeight: 40, startFrame: 0, endFrame: 3});
         this.load.spritesheet('maintower', './assets/fishbowl.png', {frameWidth: 80, frameHeight: 80, startFrame: 0, endFrame: 7});
+        this.load.spritesheet('maintower2', './assets/fishbowl_cracked_1.png', {frameWidth: 80, frameHeight: 80, startFrame: 0, endFrame: 7});
+        this.load.spritesheet('maintower3', './assets/fishbowl_cracked_2.png', {frameWidth: 80, frameHeight: 80, startFrame: 0, endFrame: 7});
     }
 
     create()
@@ -81,6 +83,18 @@ class Play extends Phaser.Scene
         this.anims.create({
             key: 'bowlanim',
             frames: this.anims.generateFrameNumbers('maintower', { start: 0, end: 7, first: 0}),
+            frameRate: 7,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'bowlanim2',
+            frames: this.anims.generateFrameNumbers('maintower2', { start: 0, end: 7, first: 0}),
+            frameRate: 7,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'bowlanim3',
+            frames: this.anims.generateFrameNumbers('maintower3', { start: 0, end: 7, first: 0}),
             frameRate: 7,
             repeat: -1
         });
@@ -232,6 +246,14 @@ class Play extends Phaser.Scene
     loseHp(tower, cat)
     {
         this.hp--;
+        if (this.hp == 2) {
+            this.mainTower.setTexture('maintower2');
+            this.mainTower.anims.play('bowlanim2', true);
+        }
+        if (this.hp == 1) {
+            this.mainTower.setTexture('maintower3');
+            this.mainTower.anims.play('bowlanim3', true);
+        }
         cat.destroy();
         console.log(this.hp);
     }
