@@ -27,8 +27,7 @@ class Play extends Phaser.Scene
         this.target = new Phaser.Math.Vector2();
 
         //placeholder title text
-        this.add.text(40, 40, "Cat Tower Play");
-        this.add.text(40, 60, "LEFT CLICK to move, SPACE to place object");
+        this.add.text(40, 40, "LEFT CLICK to move, SPACE to place object");
 
         //fishbowl sprite placement
         this.mainTower = this.physics.add.sprite(game.config.width/2 - 40,game.config.height / 2 - 40,'maintower').setOrigin(0,0);
@@ -246,6 +245,7 @@ class Play extends Phaser.Scene
     loseHp(tower, cat)
     {
         this.hp--;
+        //set cracked variations when damaged
         if (this.hp == 2) {
             this.mainTower.setTexture('maintower2');
             this.mainTower.anims.play('bowlanim2', true);
@@ -257,4 +257,19 @@ class Play extends Phaser.Scene
         cat.destroy();
         console.log(this.hp);
     }
+
+    /*
+    getNearbyRadius() {
+        var allCats = this.cats.getChildren();
+        var allBalls = this.balls.getChildren();
+        for (var i=0; i<allCats.length; i++) {
+            for (var j=0; j<allBalls.length; j++) {
+                if (Phaser.Math.Distance.Between(allCats[i].x, allCats[i].y, allBalls[j].x, allBalls[j].y) < 100) {
+                    return [allCats[i], allBalls[j]];
+                }
+            }
+        }
+        return false;
+    }
+    */
 }
