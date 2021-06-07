@@ -138,6 +138,23 @@ class Play extends Phaser.Scene
             this.physics.add.collider(this.player, this.object1, this.decelerate, null, this);
         }
 
+        this.cats.getChildren().forEach(function(cat)
+        {
+            this.balls.getChildren().forEach(function(ball)
+            {
+                if(Phaser.Math.Distance.BetweenPoints(cat,ball) < 100)
+                {
+                    this.physics.moveToObject(cat, ball, 100);
+                    if (Phaser.Math.Distance.BetweenPoints(cat,ball) < 1) {
+                        this.sound.play('bell', {volume: 0.05});
+                        this.bellPlayed = true;
+                        this.bellTimer = this.time.addEvent({ delay: 1000, callback: this.bellCooldown, callbackScope: this });
+                    }
+                }
+            },this)
+        },this)
+
+        /*
         //radius to attract cats
         if (this.object1 && this.spawn) {
             this.radius = Phaser.Math.Distance.Between(this.spawn.x, this.spawn.y, this.object1.x, this.object1.y)
@@ -154,6 +171,7 @@ class Play extends Phaser.Scene
                 }
             }
         }
+        */
     }
 
     //deceleration function for ball object
