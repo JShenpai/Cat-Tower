@@ -16,6 +16,9 @@ class Menu extends Phaser.Scene
         this.load.audio('meow2','./assets/meow2.wav');
         this.load.audio('meow3','./assets/meow3.wav');
         this.load.audio('meow4','./assets/meow4.wav');
+        this.load.audio('crack','./assets/crack.wav');
+        this.load.audio('crack1','./assets/crack1.wav');
+        this.load.audio('music','./assets/music.wav');
     }
 
     create()
@@ -29,6 +32,17 @@ class Menu extends Phaser.Scene
 
         //declare input variables
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // play music
+        let musicConfig = {
+            loop: true,
+            volume: 0.5
+        }
+        game.sound.stopAll();
+        this.gameMusic = this.sound.add('music', musicConfig);
+        if (!this.gameMusic.isPlaying) {
+            this.gameMusic.play();
+        }
     }
 
     update()

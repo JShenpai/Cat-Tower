@@ -114,6 +114,7 @@ class Play extends Phaser.Scene
         //game over scene if fishbowl loses all hp
         if(this.hp == 0)
         {
+            this.sound.play('crack1');
             this.scene.start('endScene');
         }
 
@@ -245,6 +246,7 @@ class Play extends Phaser.Scene
     loseHp(tower, cat)
     {
         this.hp--;
+        this.sound.play('crack');
         //set cracked variations when damaged
         if (this.hp == 2) {
             this.mainTower.setTexture('maintower2');
