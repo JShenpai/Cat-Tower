@@ -26,8 +26,14 @@ class Play extends Phaser.Scene
         //create object for pointer position coordinates
         this.target = new Phaser.Math.Vector2();
 
+        //number of balls and ball limit
+        this.ballLimit = 3;
+        this.ballNumber = 0;
+
         //placeholder title text
         this.add.text(40, 40, "LEFT CLICK to move, SPACE to place object");
+        this.numberText = this.add.text(40, 60, "Balls in the playground: " + this.ballNumber);
+        this.limitText = this.add.text(40, 80, "Maximum balls: " + this.ballLimit);
 
         //fishbowl sprite placement
         this.mainTower = this.physics.add.sprite(game.config.width/2 - 40,game.config.height / 2 - 40,'maintower').setOrigin(0,0);
@@ -58,10 +64,6 @@ class Play extends Phaser.Scene
         //physics groups
         this.cats = this.physics.add.group();
         this.balls = this.physics.add.group();
-
-        //number of balls and ball limit
-        this.ballLimit = 3;
-        this.ballNumber = 0;
 
         //ball limit increase timer
         this.limitTimer = this.time.addEvent({ delay: 15000, callback: this.increaseLimit, callbackScope: this, loop: true });
@@ -133,11 +135,13 @@ class Play extends Phaser.Scene
             this.balls.add(this.object1)
             this.sound.play('place', {volume: 0.25});
             this.ballNumber++;
+            this.numberText.text = "Balls in the playground: " + this.ballNumber;
 
             //object collision
             this.physics.add.collider(this.player, this.object1, this.decelerate, null, this);
         }
 
+        //radius to attract any cat to any ball
         this.cats.getChildren().forEach(function(cat)
         {
             this.balls.getChildren().forEach(function(ball)
@@ -145,10 +149,17 @@ class Play extends Phaser.Scene
                 if(Phaser.Math.Distance.BetweenPoints(cat,ball) < 100)
                 {
                     this.physics.moveToObject(cat, ball, 100);
-                    if (Phaser.Math.Distance.BetweenPoints(cat,ball) < 1) {
+                    //play sound once every second when cat is touching ball
+                    if (Phaser.Math.Distance.BetweenPoints(cat,ball) < 1 && !this.bellPlayed) {
                         this.sound.play('bell', {volume: 0.05});
                         this.bellPlayed = true;
                         this.bellTimer = this.time.addEvent({ delay: 1000, callback: this.bellCooldown, callbackScope: this });
+                        //remove ball after 3 seconds of being interacted with by cat
+                        this.despawnTimer = this.time.addEvent({ delay: 3000, callback: function() {
+                            this.balls.remove(ball, true, true);
+                            this.ballNumber = this.balls.children.size;
+                            this.numberText.text = "Balls in the playground: " + this.ballNumber;
+                        }, callbackScope: this });
                     }
                 }
             },this)
@@ -253,6 +264,7 @@ class Play extends Phaser.Scene
     //increase max placeable balls after a certain time
     increaseLimit() {
         this.ballLimit++;
+        this.limitText.text = "Maximum balls: " + this.ballLimit;
     }
 
     //end cooldown 1 second after bell sound plays
@@ -277,19 +289,4 @@ class Play extends Phaser.Scene
         cat.destroy();
         console.log(this.hp);
     }
-
-    /*
-    getNearbyRadius() {
-        var allCats = this.cats.getChildren();
-        var allBalls = this.balls.getChildren();
-        for (var i=0; i<allCats.length; i++) {
-            for (var j=0; j<allBalls.length; j++) {
-                if (Phaser.Math.Distance.Between(allCats[i].x, allCats[i].y, allBalls[j].x, allBalls[j].y) < 100) {
-                    return [allCats[i], allBalls[j]];
-                }
-            }
-        }
-        return false;
-    }
-    */
 }
