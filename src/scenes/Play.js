@@ -65,8 +65,11 @@ class Play extends Phaser.Scene
         //define other keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+        //define cat spawn rate
+        this.spawnRate = 5000;
+
         //enemy spawn timer
-        this.timer = this.time.addEvent({ delay: 5000, callback: this.spawnEnemy, callbackScope: this, loop: true });
+        this.timer = this.time.addEvent({ delay: this.spawnRate, callback: this.spawnEnemy, callbackScope: this, loop: true });
 
         this.object1 = false;
         this.spawn = false;
@@ -277,6 +280,11 @@ class Play extends Phaser.Scene
     increaseLimit() {
         this.ballLimit++;
         this.limitText.text = "Maximum balls: " + this.ballLimit;
+        //increase spawn rate if above 1 second
+        if (this.spawnRate > 1000) {
+            this.spawnRate -= 250;
+            this.timer.delay = this.spawnRate;
+        }
     }
 
     //end cooldown 1 second after bell sound plays
